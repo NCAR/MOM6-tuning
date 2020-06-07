@@ -1,6 +1,6 @@
 ocean_only/tx0.66v1/
 FMS
-mkmf
+#mkmf
 # Build directory might optionally be placed here
 build*
 # Ignore .datasets
