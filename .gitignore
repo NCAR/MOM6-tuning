@@ -8,6 +8,8 @@ build*
 # Un-ignore the following files that are to be in cime_config/
 !buildlib
 !buildnml
+# Un-ignore build scripts
+!build*.sh
 # Ignore run scripts
 run*
 # Ignore model output
