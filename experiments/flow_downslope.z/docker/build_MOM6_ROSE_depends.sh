@@ -11,8 +11,8 @@ TARGET_MOM6_OBJ=$1
 set -v 
 
 # build FMS:
-if test -f "$FMS_BLD_DIR/libfms.a"; then
-    echo "FMS already built."
+if test -f "$FMS_BLD_DIR/generated_dependencies_flag"; then
+    echo "Already built rose dependencies."
 else
   mkdir -p $FMS_BLD_DIR
   cd $FMS_BLD_DIR
@@ -20,7 +20,15 @@ else
   ../../../../src/mkmf/bin/list_paths ../../../../src/FMS
   ../../../../src/mkmf/bin/mkmf -t $ROSE_MKMF_TEMPLATE -p libfms.a -c "-Duse_libMPI -Duse_netCDF -DSPMD" path_names
   make clean
+
+  # make command expected to fail; we don't need the final libfms.a, we just need the rose
+  # compiler to generate its versions of all of the prerequisite modules
+  # set +e to prevent script from aborting when make fails
+  set +e
   make NETCDF=3 REPRO=1 libfms.a
+
+  # mark dependencies as having been generated
+  touch generated_dependencies_flag
 fi
 
 set -e # abort if any command fails
