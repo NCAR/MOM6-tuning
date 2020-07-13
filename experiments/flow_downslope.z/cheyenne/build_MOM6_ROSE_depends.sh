@@ -7,17 +7,20 @@ ROSE_MKMF_TEMPLATE=/glade/work/altuntas/mom6.standalone/MOM6-tuning/src/mkmf/tem
 TARGET_MOM6_OBJ=$1
 
 set -v 
-set -e # abort if any command fails
 
 # build FMS:
-mkdir -p $FMS_BLD_DIR
-cd $FMS_BLD_DIR
-rm -f path_names *.?90 *.mod *.rmod *.o
-../../../../src/mkmf/bin/list_paths ../../../../src/FMS
-../../../../src/mkmf/bin/mkmf -t $ROSE_MKMF_TEMPLATE -p libfms.a -c "-Duse_libMPI -Duse_netCDF -DSPMD" path_names
-make clean
-set +e # do not abort if FMS build fails
-make NETCDF=3 REPRO=1 libfms.a
+if test -f "$FMS_BLD_DIR/libfms.a"; then
+    echo "FMS already built."
+else
+  mkdir -p $FMS_BLD_DIR
+  cd $FMS_BLD_DIR
+  rm -f path_names *.?90 *.mod *.rmod *.o
+  ../../../../src/mkmf/bin/list_paths ../../../../src/FMS
+  ../../../../src/mkmf/bin/mkmf -t $ROSE_MKMF_TEMPLATE -p libfms.a -c "-Duse_libMPI -Duse_netCDF -DSPMD" path_names
+  make clean
+  set +e
+  make NETCDF=3 REPRO=1 libfms.a
+fi
 
 set -e # abort if any command fails
 

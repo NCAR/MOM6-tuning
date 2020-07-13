@@ -1,0 +1,31 @@
+#!/usr/bin/bash
+
+# source /etc/profile.d/modules.sh
+
+# module purge
+# module load python
+echo "** call to ROSE_env.sh"
+
+# export LD_LIBRARY_PATH=/glade/work/altuntas/ROSE/rose/install/lib:/glade/work/altuntas/ROSE/jdk1.8.0_241/jre/lib/amd64/server:/glade/work/altuntas/ROSE/flex-2.6.4/install/lib:/glade/work/altuntas/ROSE/boost/1_67_0/install/lib:/glade/work/altuntas/ROSE/gcc/7.4.0/install/lib64:$LD_LIBRARY_PATH
+# export PATH=/glade/work/altuntas/ROSE/rose/install/bin:/glade/work/altuntas/ROSE/jdk1.8.0_241/bin/:/glade/work/altuntas/ROSE/jdk1.8.0_241/jre/bin/:/glade/work/altuntas/ROSE/automake-1.16.2/install/bin/:/glade/work/altuntas/ROSE/flex-2.6.4/install/bin:/glade/work/altuntas/ROSE/gettext-0.19.7/install/bin:/glade/work/altuntas/ROSE/gcc/7.4.0/install/bin:$PATH
+export LD_LIBRARY_PATH="/usr/local/lib64:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server:${LD_LIBRARY_PATH}"
+export PATH="/root/precimonious-w-rose/scripts:/root/ROSE/install/bin:${PATH}"
+
+
+# export JRE_HOME=/glade/work/altuntas/ROSE/jdk1.8.0_241/jre
+# export JAVA_BINDIR=/glade/work/altuntas/ROSE/jdk1.8.0_241/bin
+# export JAVA_HOME=/glade/work/altuntas/ROSE/jdk1.8.0_241
+# export SDK_HOME=/glade/work/altuntas/ROSE/jdk1.8.0_241
+# export JDK_HOME=/glade/work/altuntas/ROSE/jdk1.8.0_241
+# export JAVA_ROOT=/glade/work/altuntas/ROSE/jdk1.8.0_241
+export JRE_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre
+export JAVA_BINDIR=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin
+export JAVA_HOME=SDK_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export SDK_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export JDK_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export JAVA_ROOT=/usr/lib/jvm/java-8-openjdk-amd64
+
+# export ROSE_EXE_PATH=/glade/work/altuntas/ROSE/rose/install/bin
+# export ROSE_PLUGIN_PATH=/glade/work/altuntas/ROSE/precimonious-w-rose/plugins
+export ROSE_EXE_PATH="/root/ROSE/install/bin"
+export ROSE_PLUGIN_PATH="/root/precimonious-w-rose/plugins"

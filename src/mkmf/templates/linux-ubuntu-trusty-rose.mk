@@ -5,7 +5,7 @@
 
 ############
 # Commands Macors
-FC = mpif90
+FC = identityTranslator
 CC = mpicc
 LD = mpif90 $(MAIN_PROGRAM)
 
@@ -81,7 +81,8 @@ MAKEFLAGS += --jobs=$(shell grep '^processor' /proc/cpuinfo | wc -l)
 CPPDEFS += -Duse_netCDF
 
 # Additional Preprocessor Macros needed due to  Autotools and CMake
-CPPDEFS += -DHAVE_SCHED_GETAFFINITY
+# commented out by jackson b/c this flag wasn't present in the calls to the compiler made by cheyenne-rose.mk
+#CPPDEFS += -DHAVE_SCHED_GETAFFINITY
 
 # Macro for Fortran preprocessor
 FPPFLAGS := $(INCLUDES)
@@ -189,6 +190,34 @@ endif
 
 LDFLAGS += $(LIBS)
 
+################### Added by jackson ########################
+
+# these flags were present in cheyenne-rose.mk
+FFLAGS += -DOVERLOAD_R8 -DOVERLOAD_R4
+
+# ROSE flags:
+FFLAGS += -rose:skip_syntax_check
+FFLAGS += -rose:skipfinalCompileStep
+FFLAGS += -rose:cray_pointer_support
+FFLAGS += -DROSEPREP
+
+# ROSE+MPI flags:
+#MPIPATH = /glade/work/altuntas/ROSE/openmpi-4.0.3/install/
+MPIPATH = /usr/lib/x86_64-linux-gnu/openmpi
+FFLAGS += -I${MPIPATH}/include -pthread -I${MPIPATH}/lib -Wl,-rpath -Wl,${MPIPATH}/lib -Wl,--enable-new-dtags -L${MPIPATH}/lib -lmpi_usempif08 -lmpi_usempi_ignore_tkr -lmpi_mpifh -lmpi 
+CFLAGS +=  -I${MPIPATH}/include -pthread -Wl,-rpath -Wl,${MPIPATH}/lib -Wl,--enable-new-dtags -L${MPIPATH}/lib -lmpi
+
+# ROSE+NETCDF flags:
+#NETCDFPATH = /glade/u/apps/ch/opt/netcdf/4.7.3/gnu/7.4.0/
+#FFLAGS += -lnetcdff -lnetcdf -L${NETCDFPATH}/lib -I${NETCDFPATH}/include -Wl,-rpath,${NETCDFPATH}/lib
+#CFLAGS += -lnetcdff -lnetcdf -L${NETCDFPATH}/lib -I${NETCDFPATH}/include -Wl,-rpath,${NETCDFPATH}/lib
+NETCDF_LIB = /usr/lib/x86_64-linux-gnu/
+NETCDF_INC = /usr/include/
+FFLAGS += -lnetcdff -lnetcdf -L${NETCDF_LIB} -I${NETCDF_INC} -Wl,-rpath,${NETCDF_LIB}
+CFLAGS += -lnetcdff -lnetcdf -L${NETCDF_LIB} -I${NETCDF_INC} -Wl,-rpath,${NETCDF_LIB}
+
+#############################################################
+
 #---------------------------------------------------------------------------
 # you should never need to change any lines below.
 
@@ -210,6 +239,12 @@ LDFLAGS += $(LIBS)
 
 RM = rm -f
 TMPFILES = .*.m *.B *.L *.i *.i90 *.l *.s *.mod *.opt
+
+################### Added by jackson ########################
+#ROSE files:
+TMPFILES += *.rmod *_postprocessed.?90 rose_*.?90
+#############################################################
+
 
 .SUFFIXES: .F .F90 .H .L .T .f .f90 .h .i .i90 .l .o .s .opt .x
 
