@@ -1,0 +1,10 @@
+CPU_stats
+*postprocessed*
+MOM_parameter_doc.all
+MOM_parameter_doc.debugging
+MOM_parameter_doc.layout
+MOM_parameter_doc.short
+*.rmod
+ocean.stats
+prec_*
+git status
