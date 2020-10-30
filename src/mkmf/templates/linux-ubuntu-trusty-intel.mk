@@ -1,13 +1,13 @@
-# Template for the GNU Compiler Collection on Trusty version of Ubuntu Linux systems (used by Travis-CI)
+# Template for the Intel Compilers on Linux systems
 #
 # Typical use with mkmf
-# mkmf -t linux-ubuntu-trusty-gnu.mk -c"-Duse_libMPI -Duse_netCDF" path_names /usr/local/include
+# mkmf -t linux-intel.mk -c"-Duse_libMPI -Duse_netCDF" path_names /usr/local/include
 
 ############
-# Commands Macors
-FC = identityTranslator
-CC = mpicc
-LD = mpif90 $(MAIN_PROGRAM)
+# Command Macros
+FC = mpiifort
+CC = mpiicc
+LD = mpiifort $(MAIN_PROGRAM)
 
 #######################
 # Build target macros
@@ -48,7 +48,7 @@ NETCDF =             # If value is '3' and CPPDEFS contains
 INCLUDES =           # A list of -I Include directories to be added to the
                      # the compile command.
 
-SSE =                # The SSE options to be used to compile.  If blank,
+SSE = -xsse2         # The SSE options to be used to compile.  If blank,
                      # than use the default SSE settings for the host.
                      # Current default is to use SSE2.
 
@@ -75,52 +75,61 @@ $(error Options DEBUG and TEST cannot be used together)
 endif
 endif
 
-# modified by Jackson to be a single job so that files can be written to
-# MAKEFLAGS += --jobs=$(shell grep '^processor' /proc/cpuinfo | wc -l)
-MAKEFLAGS += --jobs=1
+MAKEFLAGS += --jobs=$(shell grep '^processor' /proc/cpuinfo | wc -l)
 
 # Required Preprocessor Macros:
 CPPDEFS += -Duse_netCDF
 
 # Additional Preprocessor Macros needed due to  Autotools and CMake
-# commented out by jackson b/c this flag wasn't present in the calls to the compiler made by cheyenne-rose.mk
-#CPPDEFS += -DHAVE_SCHED_GETAFFINITY
+CPPDEFS += -DHAVE_SCHED_GETAFFINITY
 
 # Macro for Fortran preprocessor
-FPPFLAGS := $(INCLUDES)
+FPPFLAGS = -fpp -Wp,-w $(INCLUDES)
 # Fortran Compiler flags for the NetCDF library
-FPPFLAGS += $(shell nf-config --fflags)
+FFPPLAGS += $(shell nf-config --fflags)
+
+#### Commented out by Jackson to mirror changes between linux-gnu.mk to linux-ubuntu-trusty-gnu.mk
+# Fortran Compiler flags for the MPICH MPI library
+#FFPPLAGS += $(shell pkg-config --cflags-only-I mpich2-c)
 
 # Base set of Fortran compiler flags
-FFLAGS := -fcray-pointer -fdefault-double-8 -fdefault-real-8 -Waliasing -ffree-line-length-none -fno-range-check
+FFLAGS := -fno-alias -stack_temps -safe_cray_ptr -ftz -assume byterecl -i4 -r8 -nowarn -g -sox -traceback
 
 # Flags based on perforance target (production (OPT), reproduction (REPRO), or debug (DEBUG)
-FFLAGS_OPT = -O3
-FFLAGS_REPRO = -O2 -fbounds-check
-FFLAGS_DEBUG = -O0 -g -W -fbounds-check -fbacktrace -ffpe-trap=invalid,zero,overflow
+FFLAGS_OPT = -O2
+FFLAGS_REPRO = -O2
+FFLAGS_DEBUG = -O0 -check -check noarg_temp_created -check nopointer -warn -warn noerrors -debug variable_locations -fpe0 -ftrapuv
 
 # Flags to add additional build options
-FFLAGS_OPENMP = -fopenmp
-FFLAGS_VERBOSE =
-FFLAGS_COVERAGE =
+FFLAGS_OPENMP = -qopenmp
+FFLAGS_OVERRIDE_LIMITS = -qoverride-limits
+FFLAGS_VERBOSE = -v -V -what -warn all
+FFLAGS_COVERAGE = -prof-gen=srcpos
 
 # Macro for C preprocessor
-CPPFLAGS = $(INCLUDES)
+CPPFLAGS = -D__IFC $(INCLUDES)
+
+#### Substituted by Jackson to mirror changes between linux-gnu.mk to linux-ubuntu-trusty-gnu.mk
 # C Compiler flags for the NetCDF library
+# CPPFLAGS += $(shell nc-config --cflags)
 CPPFLAGS += $(shell nf-config --cflags)
 
+#### Commented out by Jackson to mirror changes between linux-gnu.mk to linux-ubuntu-trusty-gnu.mk
+# C Compiler flags for the MPICH MPI library
+# CPPFLAGS += $(shell pkg-config --cflags-only-I mpich2-c)
+
 # Base set of C compiler flags
-CFLAGS := -D__IFC
+CFLAGS := -sox -traceback
 
 # Flags based on perforance target (production (OPT), reproduction (REPRO), or debug (DEBUG)
 CFLAGS_OPT = -O2
 CFLAGS_REPRO = -O2
-CFLAGS_DEBUG = -O0 -g
+CFLAGS_DEBUG = -O0 -g -ftrapuv
 
 # Flags to add additional build options
-CFLAGS_OPENMP = -fopenmp
-CFLAGS_VERBOSE =
-CFLAGS_COVERAGE =
+CFLAGS_OPENMP = -qopenmp
+CFLAGS_VERBOSE = -w3
+CFLAGS_COVERAGE = -prof-gen=srcpos
 
 # Optional Testing compile flags.  Mutually exclusive from DEBUG, REPRO, and OPT
 # *_TEST will match the production if no new option(s) is(are) to be tested.
@@ -129,14 +138,18 @@ CFLAGS_TEST = $(CFLAGS_OPT)
 
 # Linking flags
 LDFLAGS :=
-LDFLAGS_OPENMP := -fopenmp
-LDFLAGS_VERBOSE :=
-LDFLAGS_COVERAGE :=
+LDFLAGS_OPENMP := -qopenmp
+LDFLAGS_VERBOSE := -Wl,-V,--verbose,-cref,-M
+LDFLAGS_COVERAGE = -prof-gen=srcpos
 
 # Start with a blank LIBS
 LIBS =
 # NetCDF library flags
 LIBS += $(shell nf-config --flibs)
+
+#### Commented out by Jackson to mirror changes between linux-gnu.mk to linux-ubuntu-trusty-gnu.mk
+# MPICH MPI library flags
+# $(shell pkg-config --libs mpich2-f90)
 
 # Get compile flags based on target macros.
 ifdef REPRO
@@ -192,35 +205,6 @@ endif
 
 LDFLAGS += $(LIBS)
 
-################### Added by jackson ########################
-
-# these flags were present in cheyenne-rose.mk
-FFLAGS += -DOVERLOAD_R8 -DOVERLOAD_R4
-
-# ROSE flags:
-FFLAGS += -rose:plugin_lib /root/precimonious-w-rose/plugins/PrecimoniousPlugin.so -rose:plugin_action prec-generate-graph -rose:plugin_arg_prec-generate-graph /root/MOM6-tuning/experiments/flow_downslope.z/
-FFLAGS += -rose:skip_syntax_check
-FFLAGS += -rose:skipfinalCompileStep
-FFLAGS += -rose:cray_pointer_support
-FFLAGS += -DROSEPREP
-
-# ROSE+MPI flags:
-#MPIPATH = /glade/work/altuntas/ROSE/openmpi-4.0.3/install/
-MPIPATH = /usr/lib/x86_64-linux-gnu/openmpi
-FFLAGS += -I${MPIPATH}/include -pthread -I${MPIPATH}/lib -Wl,-rpath -Wl,${MPIPATH}/lib -Wl,--enable-new-dtags -L${MPIPATH}/lib -lmpi_usempif08 -lmpi_usempi_ignore_tkr -lmpi_mpifh -lmpi 
-CFLAGS +=  -I${MPIPATH}/include -pthread -Wl,-rpath -Wl,${MPIPATH}/lib -Wl,--enable-new-dtags -L${MPIPATH}/lib -lmpi
-
-# ROSE+NETCDF flags:
-#NETCDFPATH = /glade/u/apps/ch/opt/netcdf/4.7.3/gnu/7.4.0/
-#FFLAGS += -lnetcdff -lnetcdf -L${NETCDFPATH}/lib -I${NETCDFPATH}/include -Wl,-rpath,${NETCDFPATH}/lib
-#CFLAGS += -lnetcdff -lnetcdf -L${NETCDFPATH}/lib -I${NETCDFPATH}/include -Wl,-rpath,${NETCDFPATH}/lib
-NETCDF_LIB = /usr/lib/x86_64-linux-gnu/
-NETCDF_INC = /usr/include/
-FFLAGS += -lnetcdff -lnetcdf -L${NETCDF_LIB} -I${NETCDF_INC} -Wl,-rpath,${NETCDF_LIB}
-CFLAGS += -lnetcdff -lnetcdf -L${NETCDF_LIB} -I${NETCDF_INC} -Wl,-rpath,${NETCDF_LIB}
-
-#############################################################
-
 #---------------------------------------------------------------------------
 # you should never need to change any lines below.
 
@@ -242,12 +226,6 @@ CFLAGS += -lnetcdff -lnetcdf -L${NETCDF_LIB} -I${NETCDF_INC} -Wl,-rpath,${NETCDF
 
 RM = rm -f
 TMPFILES = .*.m *.B *.L *.i *.i90 *.l *.s *.mod *.opt
-
-################### Added by jackson ########################
-#ROSE files:
-TMPFILES += *.rmod *_postprocessed.?90 rose_*.?90
-#############################################################
-
 
 .SUFFIXES: .F .F90 .H .L .T .f .f90 .h .i .i90 .l .o .s .opt .x
 
