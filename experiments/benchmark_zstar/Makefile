@@ -5,7 +5,7 @@ clean:
 
 rose-clean: clean
 	# remove rose generated files
-	rm -rf prec_logs prec_workspace *postprocessed* *.rmod 
+	rm -rf prec_logs prec_workspace *postprocessed* *.rmod rose_*
 
 reset: rose-clean
 	rm ../../build/* -rf
