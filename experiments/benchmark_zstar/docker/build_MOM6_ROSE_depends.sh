@@ -31,7 +31,9 @@ else
   touch generated_dependencies_flag
 fi
 
-set -e # abort if any command fails
+# commented this out because now that we are compiling all of the dependencies for the entire
+# executable, the final executable will fail much like above with fms
+# set -e # abort if any command fails
 
 # build MOM6:
 mkdir -p $MOM6_BLD_DIR
