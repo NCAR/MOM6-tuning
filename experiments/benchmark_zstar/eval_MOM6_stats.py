@@ -8,5 +8,5 @@ def read_MOM6_time(logfilepath, clockname):
     
 
 if __name__ == "__main__":
-    clock_coradvcalc = read_MOM6_time("./logfile.000000.out", "(Ocean Coriolis Adv Calc)")
-    print(clock_coradvcalc)
+    clock_continuity = read_MOM6_time("./logfile.000000.out", "(Ocean continuity PPM)")
+    print(clock_continuity)
