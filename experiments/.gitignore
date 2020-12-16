@@ -6,5 +6,4 @@ MOM_parameter_doc.layout
 MOM_parameter_doc.short
 *.rmod
 ocean.stats
-prec_*
-git status
+prose_*
