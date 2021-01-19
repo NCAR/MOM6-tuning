@@ -198,7 +198,7 @@ LDFLAGS += $(LIBS)
 FFLAGS += -DOVERLOAD_R8 -DOVERLOAD_R4
 
 # ROSE flags:
-FFLAGS += -rose:plugin_lib /root/precimonious-w-rose/plugins/PrecimoniousPlugin.so -rose:plugin_action prec-generate-graph -rose:plugin_arg_prec-generate-graph /root/MOM6-tuning/experiments/flow_downslope.z/
+FFLAGS += -rose:plugin_lib /root/precimonious-w-rose/plugins/ProsePlugin.so -rose:plugin_action prose-generate-graph -rose:plugin_arg_prose-generate-graph /root/MOM6-tuning/experiments/flow_downslope.z/
 FFLAGS += -rose:skip_syntax_check
 FFLAGS += -rose:skipfinalCompileStep
 FFLAGS += -rose:cray_pointer_support
