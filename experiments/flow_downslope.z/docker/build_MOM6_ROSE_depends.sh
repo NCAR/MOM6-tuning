@@ -31,8 +31,6 @@ else
   touch generated_dependencies_flag
 fi
 
-set -e # abort if any command fails
-
 # build MOM6:
 mkdir -p $MOM6_BLD_DIR
 cd $MOM6_BLD_DIR
