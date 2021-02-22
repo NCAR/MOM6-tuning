@@ -1,8 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
-FMS_BLD_DIR=/glade/work/altuntas/mom6.standalone/MOM6-tuning/build/rose/shared/repro
-MOM6_BLD_DIR=/glade/work/altuntas/mom6.standalone/MOM6-tuning/build/rose/ocean_only/repro
-ROSE_MKMF_TEMPLATE=/glade/work/altuntas/mom6.standalone/MOM6-tuning/src/mkmf/templates/cheyenne-rose.mk
+REPO_ROOT=/glade/work/jdvanover/MOM6-tuning
+
+FMS_BLD_DIR="${REPO_ROOT}"/build/rose/shared/repro
+MOM6_BLD_DIR="${REPO_ROOT}"/build/rose/ocean_only/repro
+ROSE_MKMF_TEMPLATE="${REPO_ROOT}"/src/mkmf/templates/cheyenne-rose.mk
 
 TARGET_MOM6_OBJ=$1
 
@@ -21,8 +23,6 @@ else
   set +e
   make NETCDF=3 REPRO=1 libfms.a
 fi
-
-set -e # abort if any command fails
 
 # build MOM6:
 mkdir -p $MOM6_BLD_DIR
