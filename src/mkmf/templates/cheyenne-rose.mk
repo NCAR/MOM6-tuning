@@ -17,7 +17,8 @@ REPRO =
 VERBOSE =
 OPENMP =
 
-MAKEFLAGS += --jobs=$(shell grep '^processor' /proc/cpuinfo | wc -l)
+# MAKEFLAGS += --jobs=$(shell grep '^processor' /proc/cpuinfo | wc -l)
+MAKEFLAGS += --jobs=1
 
 FPPFLAGS :=
 
@@ -40,6 +41,7 @@ CFLAGS_OPENMP = -fopenmp
 CFLAGS_DEBUG = -O0 -g
 
 # ROSE flags:
+FFLAGS += -rose:plugin_lib /glade/u/home/jdvanover/precimonious-w-rose/plugins/ProsePlugin.so -rose:plugin_action prose-generate-graph -rose:plugin_arg_prose-generate-graph /glade/work/jdvanover/MOM6-tuning/experiments/flow_downslope.z/
 FFLAGS += -rose:skip_syntax_check
 FFLAGS += -rose:skipfinalCompileStep
 FFLAGS += -rose:cray_pointer_support
@@ -120,7 +122,7 @@ LDFLAGS += $(LIBS)
 # The macro TMPFILES is provided to slate files like the above for removal.
 
 RM = rm -f
-SHELL = /bin/csh -f
+SHELL = /bin/bash -f
 TMPFILES = .*.m *.B *.L *.i *.i90 *.l *.s *.mod *.opt
 
 #ROSE files:
