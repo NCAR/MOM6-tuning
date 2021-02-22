@@ -7,7 +7,3 @@ rose-clean: clean
 
 reset: rose-clean
 	rm ../../build/* -rf
-
-load: reset
-	cp -r ../../MOM6_full_fp_dataflow_graph_6/prose_* .
-	cp -r ../../MOM6_full_fp_dataflow_graph_6/rose ../../build/
