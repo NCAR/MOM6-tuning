@@ -75,9 +75,7 @@ $(error Options DEBUG and TEST cannot be used together)
 endif
 endif
 
-# modified by Jackson to be a single job so that files can be written to
-# MAKEFLAGS += --jobs=$(shell grep '^processor' /proc/cpuinfo | wc -l)
-MAKEFLAGS += --jobs=1
+MAKEFLAGS += --jobs=$(shell grep '^processor' /proc/cpuinfo | wc -l)
 
 # Required Preprocessor Macros:
 CPPDEFS += -Duse_netCDF
