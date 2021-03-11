@@ -17,8 +17,7 @@ REPRO =
 VERBOSE =
 OPENMP =
 
-# MAKEFLAGS += --jobs=$(shell grep '^processor' /proc/cpuinfo | wc -l)
-MAKEFLAGS += --jobs=1
+MAKEFLAGS += --jobs=$(shell grep '^processor' /proc/cpuinfo | wc -l)
 
 FPPFLAGS :=
 
