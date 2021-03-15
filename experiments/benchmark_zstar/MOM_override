@@ -10,15 +10,15 @@
 #override NJGLOBAL =  60
 !#override DT = 2700.0
 !#override DT_THERM = 10800.0
-#override DT = 3600.0
-#override DT_THERM = 14400.0
+#override DT = 1800.0
+#override DT_THERM = 7200.0
 ! coarsen x4 ---------------
 !#override NIGLOBAL =  90
 !#override NJGLOBAL =  40
 !#override DT = 3600.0
 !#override DT_THERM = 14400.0
 
-#override DAYMAX = 60
+#override DAYMAX = 30
 #override ENERGYSAVEDAYS = 0.25
 
 !!!! Physics and Parameterizations
@@ -93,37 +93,8 @@ KD_MAX = 0.1
 HMIX_FIXED = 0.5
 #override KHTH_MAX = 0.0
 #override KHTR = 0.0
-!!KHTR_MIN = 50.0
-!!MEKE_KHMEKE_FAC = 0.5
-!!MEKE_ALPHA_GRID = 1.0
-!!KH_RES_SCALE_COEF = 0.4
-!!#override KHTR_MAX = 0.0
-!!KD_SMOOTH = 1.0e-6
-!!FGNV_C_MIN = 0.01
-!!DTFREEZE_DP = -7.75E-08
-!!CFL_TRUNCATE_RAMP_TIME = 7200.0
-!!MLE_MLD_DECAY_TIME = 3.456E+05
-!!#override KHTH = 0.0
-!!DEPTH_SCALED_KHTH_H0 = 250.0
-!!KD_MIN = 2.0E-06
-!!MEKE_KHTH_FAC = 1.0
-!!MEKE_ADVECTION_FACTOR = 1.0
-!!MLE_FRONT_LENGTH = 1000.0
-!!VISC_RES_SCALE_COEF = 0.4
-!!MEKE_KHTR_FAC = 1.0
-!!MEKE_GMCOEFF = 0.0
-!!MEKE_ALPHA_RHINES = 1.0
-!!AH = 1.0E+12
-!!MEKE_ALPHA_DEFORM = 1.0
-!!#override VISBECK_L_SCALE = 0.0
-!!MEKE_GEOMETRIC_ALPHA = 1.0
-!!#override KHTR_SLOPE_CFF = 0.0
-!!MEKE_VISCOSITY_COEFF_KU = 0.2
-!!#override AH_VEL_SCALE = 0.0
-!!MEKE_ALPHA_EADY = 1.0
 LEITH_BI_CONST = 128.0
 
 #override ETA_TOLERANCE = 1.0e-6
 ETA_TOLERANCE_AUX = 1.0e-6
-VERY_SMALL_FREQUENCY = 1.0e-17
-KV_TBL_MIN = 1.0e-4
+
