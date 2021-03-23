@@ -1,24 +1,24 @@
 ! Blank file in which we can put "overrides" for parameters
 
-!! coarsen x2 ---------------
-!!#override NIGLOBAL =  180
-!!#override NJGLOBAL =  90
+!!! coarsen x2 ---------------
+!!!#override NIGLOBAL =  180
+!!!#override NJGLOBAL =  90
+!!!#override DT = 3600.0
+!!!#override DT_THERM = 14400.0
+!! coarsen x3 ---------------
+!#override NIGLOBAL =  120
+!#override NJGLOBAL =  60
+!!#override DT = 2700.0
+!!#override DT_THERM = 10800.0
+!#override DT = 1800.0
+!#override DT_THERM = 7200.0
+!! coarsen x4 ---------------
+!!#override NIGLOBAL =  90
+!!#override NJGLOBAL =  40
 !!#override DT = 3600.0
 !!#override DT_THERM = 14400.0
-! coarsen x3 ---------------
-#override NIGLOBAL =  120
-#override NJGLOBAL =  60
-!#override DT = 2700.0
-!#override DT_THERM = 10800.0
-#override DT = 1800.0
-#override DT_THERM = 7200.0
-! coarsen x4 ---------------
-!#override NIGLOBAL =  90
-!#override NJGLOBAL =  40
-!#override DT = 3600.0
-!#override DT_THERM = 14400.0
 
-#override DAYMAX = 30
+#override DAYMAX = 4
 #override ENERGYSAVEDAYS = 0.25
 
 !!!! Physics and Parameterizations
