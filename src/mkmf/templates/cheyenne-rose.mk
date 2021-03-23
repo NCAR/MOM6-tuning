@@ -40,7 +40,7 @@ CFLAGS_OPENMP = -fopenmp
 CFLAGS_DEBUG = -O0 -g
 
 # ROSE flags:
-FFLAGS += -rose:plugin_lib /glade/u/home/jdvanover/precimonious-w-rose/plugins/ProsePlugin.so -rose:plugin_action prose-generate-graph -rose:plugin_arg_prose-generate-graph /glade/work/jdvanover/MOM6-tuning/experiments/flow_downslope.z/
+FFLAGS += -rose:plugin_lib /glade/u/home/jdvanover/precimonious-w-rose/plugins/ProsePlugin.so -rose:plugin_action prose-generate-graph -rose:plugin_arg_prose-generate-graph /glade/work/jdvanover/MOM6-tuning/experiments/benchmark_zstar/
 FFLAGS += -rose:skip_syntax_check
 FFLAGS += -rose:skipfinalCompileStep
 FFLAGS += -rose:cray_pointer_support
