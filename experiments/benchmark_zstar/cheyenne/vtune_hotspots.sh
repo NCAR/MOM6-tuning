@@ -15,11 +15,7 @@ rm -rf result result.txt
 amplxe-cl --collect=hotspots --result-dir=result --return-app-exitcode -- mpiexec "${1}"
 err="${?}"
 if [ "${err}" -eq 0 ]; then
-    amplxe-cl --report=gprof-cc --result-dir=result --format=text --report-output=result.txt
-    pushd prose_logs > /dev/null 2>&1
-    dest="$(printf "./prose_logs/%03d/report.txt" $(($(find -type d -regex "./[0-9]+$" | wc -l) - 2)))"
-    popd > /dev/null 2>&1
-    cp result.txt "${dest}"
+    amplxe-cl --report=gprof-cc --result-dir=result --format=text --report-output="$(printf "./prose_logs/%03d/vtune_report.txt" $(($(find prose_logs -type d -regex "prose_logs/[0-9]+$" | wc -l) - 1)))"
     exit 0
 else
     exit 1
