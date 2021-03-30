@@ -108,7 +108,7 @@ if __name__ == "__main__":
 
     logPath = sys.argv[1]
 
-    ensemble_dir = "/glade/scratch/altuntas/mom6.standalone/MOM6-tuning/experiments/ensemble/benchmark_zstar.002"
+    ensemble_dir = "/glade/work/jdvanover/quarantine/ECT_gen/MOM6-tuning/experiments/ensemble/benchmark_zstar.empty"
     nens = 25
     ens_ocnstats = []
     for i in range(1,nens+1):
