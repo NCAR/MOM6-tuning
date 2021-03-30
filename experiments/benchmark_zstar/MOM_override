@@ -18,7 +18,7 @@
 !!#override DT = 3600.0
 !!#override DT_THERM = 14400.0
 
-#override DAYMAX = 4
+#override DAYMAX = 28
 #override ENERGYSAVEDAYS = 0.25
 
 !!!! Physics and Parameterizations
