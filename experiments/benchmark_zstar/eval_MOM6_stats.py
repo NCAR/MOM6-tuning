@@ -23,6 +23,9 @@ def get_MOM_continuity_PPM_time(logPath):
 
 
 def check_consistency(ds_list_ensemble, ds_experiment):
+
+    EPS = 3.0
+
     fig, axs = plt.subplots(3,figsize=(10, 6))
     fig.suptitle('Statistical consistency check')
     #axs[0].plot(x, y)
@@ -42,11 +45,11 @@ def check_consistency(ds_list_ensemble, ds_experiment):
     axs[0].plot(da_mean, color='blue', alpha=.6)
     #std
     da_std = np.sqrt( sum([(da-da_mean)**2 for da in da_ensemble]) / N )   
-    axs[0].plot(da_mean+1.5*da_std, color='orange')
-    axs[0].plot(da_mean-1.5*da_std, color='orange')
+    axs[0].plot(da_mean+EPS*da_std, color='orange')
+    axs[0].plot(da_mean-EPS*da_std, color='orange')
     axs[0].set_title(da.long_name + " ("+da.units+")")
     #test
-    da_test = np.logical_and(da_exp<(da_mean+1.5*da_std), da_exp>(da_mean-1.5*da_std))
+    da_test = np.logical_and(da_exp<(da_mean+EPS*da_std), da_exp>(da_mean-EPS*da_std))
     consistency_score = sum(da_test)/len(da_test)
     if consistency_score>min_consistency_score:
         axs[0].plot(da_exp, color='green')
@@ -64,11 +67,11 @@ def check_consistency(ds_list_ensemble, ds_experiment):
     axs[1].plot(da_mean, color='blue', alpha=.6)
     #std
     da_std = np.sqrt( sum([(da-da_mean)**2 for da in da_ensemble]) / N )   
-    axs[1].plot(da_mean+1.5*da_std, color='orange')
-    axs[1].plot(da_mean-1.5*da_std, color='orange')
+    axs[1].plot(da_mean+EPS*da_std, color='orange')
+    axs[1].plot(da_mean-EPS*da_std, color='orange')
     axs[1].set_title(da.long_name + " ("+da.units+")")
     #test
-    da_test = np.logical_and(da_exp<(da_mean+1.5*da_std), da_exp>(da_mean-1.5*da_std))
+    da_test = np.logical_and(da_exp<(da_mean+EPS*da_std), da_exp>(da_mean-EPS*da_std))
     consistency_score = sum(da_test)/len(da_test)
     if consistency_score>min_consistency_score:
         axs[1].plot(da_exp, color='green')
@@ -86,12 +89,12 @@ def check_consistency(ds_list_ensemble, ds_experiment):
     axs[2].plot(da_mean, color='blue', alpha=.6)
     #std
     da_std = np.sqrt( sum([(da-da_mean)**2 for da in da_ensemble]) / N )   
-    axs[2].plot(da_mean+1.5*da_std, color='orange')
-    axs[2].plot(da_mean-1.5*da_std, color='orange')
+    axs[2].plot(da_mean+EPS*da_std, color='orange')
+    axs[2].plot(da_mean-EPS*da_std, color='orange')
     axs[2].plot(da_exp, color='red')
     axs[2].set_title(da.long_name + " ("+da.units+")")
     #test
-    da_test = np.logical_and(da_exp<(da_mean+1.5*da_std), da_exp>(da_mean-1.5*da_std))
+    da_test = np.logical_and(da_exp<(da_mean+EPS*da_std), da_exp>(da_mean-EPS*da_std))
     consistency_score = sum(da_test)/len(da_test)
     if consistency_score>min_consistency_score:
         axs[2].plot(da_exp, color='green')
