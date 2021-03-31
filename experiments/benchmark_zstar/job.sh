@@ -6,6 +6,7 @@
 #PBS -j oe
 #PBS -k eod
 #PBS -l select=3:ncpus=36:mpiprocs=36
+#PBS -l inception=login
 
 export TMPDIR=/glade/scratch/$USER/temp
 mkdir -p $TMPDIR
