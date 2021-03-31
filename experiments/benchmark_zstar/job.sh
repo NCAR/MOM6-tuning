@@ -11,7 +11,7 @@
 export TMPDIR=/glade/scratch/$USER/temp
 mkdir -p $TMPDIR
 
+source /glade/u/home/jdvanover/precimonious-w-rose/scripts/cheyenne/activate_ROSE.sh
+
 ### Run the executable
-module load python
-ncar_pylib
 python3 /glade/u/home/jdvanover/precimonious-w-rose/scripts/prose_full.py -s cheyenne/setup.ini
