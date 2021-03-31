@@ -118,9 +118,9 @@ def compare_results(routines1, routines2, n, args):
             r2_child = float(routines2[rname].child)
             r2_selfperc = float(routines2[rname].perc)
         else:
-            r1_self = math.nan
-            r1_child = math.nan
-            r1_selfperc = math.nan
+            r2_self = math.nan
+            r2_child = math.nan
+            r2_selfperc = math.nan
 
         if not (math.isnan(r1_self) or math.isnan(r2_self)):
             if r2_self != 0:
