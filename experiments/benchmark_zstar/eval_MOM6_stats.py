@@ -22,7 +22,7 @@ def get_MOM_continuity_PPM_time(logPath):
     return totalTime
 
 
-def check_consistency(ds_list_ensemble, ds_experiment):
+def check_consistency(ds_list_ensemble, ds_experiment, logPath):
 
     EPS = 3.0
 
@@ -103,7 +103,7 @@ def check_consistency(ds_list_ensemble, ds_experiment):
         PASSED = False
         
     timestr = time.strftime("%Y%m%d-%H%M%S")
-    fig.savefig('check_{}_{}.png'.format('PASS' if PASSED else 'FAIL', timestr))
+    fig.savefig(os.path.join(logPath, 'check_{}_{}.png'.format('PASS' if PASSED else 'FAIL', timestr)))
     return PASSED
 
 
@@ -117,7 +117,7 @@ if __name__ == "__main__":
     for i in range(1,nens+1):
         ens_ocnstats.append(xr.open_dataset(ensemble_dir+"/out_"+str(i)+"/ocean.stats.nc"))
     ds_experiment = xr.open_dataset( "./ocean.stats.nc")
-    PASSED = check_consistency(ens_ocnstats, ds_experiment)
+    PASSED = check_consistency(ens_ocnstats, ds_experiment, logPath)
 
     if PASSED:
         clock = get_MOM_continuity_PPM_time(logPath)
