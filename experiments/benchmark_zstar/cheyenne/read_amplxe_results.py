@@ -7,6 +7,7 @@ extract xmlchange commands from a caseroot
 
 import os
 import argparse
+import math
 from collections import namedtuple
 from operator import attrgetter, itemgetter
 
@@ -102,18 +103,33 @@ def print_most_expensive(routines, n, args):
 def compare_results(routines1, routines2, n, args):
 
     routines_diff = []
-    for rname in routines1:
-        r1_self = float(routines1[rname].self)
-        r1_child = float(routines1[rname].child)
-        try:
+    routines = set(routines1.keys()).union(set(routines2.keys()))
+    for rname in routines:
+        if rname in routines1:
+            r1_self = float(routines1[rname].self)
+            r1_child = float(routines1[rname].child)
+            r1_selfperc = float(routines1[rname].perc)
+        else:
+            r1_self = math.nan
+            r1_child = math.nan
+            r1_selfperc = math.nan
+        if rname in routines2:
             r2_self = float(routines2[rname].self)
             r2_child = float(routines2[rname].child)
-        except:
-            #print("Couldn't process "+rname+" in "+args.f2)
-            continue
-        if r2_self==0:
-            continue
-        ratio = r1_self/r2_self
+            r2_selfperc = float(routines2[rname].perc)
+        else:
+            r1_self = math.nan
+            r1_child = math.nan
+            r1_selfperc = math.nan
+
+        if not (math.isnan(r1_self) or math.isnan(r2_self)):
+            if r2_self != 0:
+                ratio = r1_self/r2_self
+            else:
+                ratio = math.nan
+        else:
+            ratio = math.nan
+
         routines_diff.append([
             rname, 
             ratio,
@@ -121,7 +137,9 @@ def compare_results(routines1, routines2, n, args):
             r2_self,
             r1_child,
             r2_child,
-            (r1_self+r1_child)/(r2_self+r2_child)])
+            (r1_self+r1_child)/(r2_self+r2_child),
+            r1_selfperc,
+            r2_selfperc])
 
     if args.s == "self":
         ratio_ix = 1
@@ -129,9 +147,9 @@ def compare_results(routines1, routines2, n, args):
         ratio_ix = 6
     else:
         raise RuntimeError("Invalid -s option: specify 'self' or 'total' ")
-    routines_diff_sorted = sorted(routines_diff, key=itemgetter(ratio_ix), reverse=True)
+    routines_diff_sorted = sorted([x for x in routines_diff if not math.isnan(x[ratio_ix])], key=itemgetter(ratio_ix), reverse=True) + [x for x in routines_diff if math.isnan(x[ratio_ix])]
     print("{:11s} {:11s} {:9} {:9} {:9} {:10s} {}".\
-            format(" ratio", " self1", " self2", "child1", "child2", "self1%", "name"))
+            format(" ratio", " self1", " self2", "child1", "child2", "self1%", "self2%", "name"))
     nprinted = 0
     for i in range(len(routines_diff_sorted)):
         rname = routines_diff_sorted[i][0]
@@ -140,12 +158,21 @@ def compare_results(routines1, routines2, n, args):
         self2 = routines_diff_sorted[i][3]
         child1 = routines_diff_sorted[i][4]
         child2 = routines_diff_sorted[i][5]
-        self1perc = float(routines1[rname].perc)
-        self2perc = float(routines2[rname].perc)
-        if args.t>self1perc and args.t>self2perc:
-            continue
-        print("{:10f} {:9} {:9} {:9} {:9} {:9}  {}".\
-            format(ratio,self1,self2,child1,child2,self1perc,rname))
+        self1perc = routines_diff_sorted[i][7]
+        self2perc = routines_diff_sorted[i][8]
+
+        if not ( math.isnan(self1perc) or math.isnan(self2perc) ):
+            if args.t>self1perc and args.t>self2perc:
+                continue
+        elif not math.isnan(self1perc):
+            if args.t/2>self1perc:
+                continue
+        elif not math.isnan(self2perc):
+            if args.t/2>self2perc:
+                continue
+
+        print("{:10f} {:9} {:9} {:9} {:9} {:9} {:9} {}".\
+            format(ratio,self1,self2,child1,child2,self1perc,self2perc,rname))
         nprinted +=1
         if nprinted==args.n:
             break
